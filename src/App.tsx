@@ -5,7 +5,7 @@ import Pieces from "./components/Pieces";
 
 function App() {
   return (
-    <Box sx={{position: "relative", border: "green solid 10px"}}>
+    <Box sx={{position: "relative", border: "green solid 10px", width: "740px", margin: "20px auto"}}>
       <Board />
       <Pieces />
     </Box>

@@ -1,3 +1,5 @@
+import {Box} from "@mui/material";
+
 import whiteKing from "../assets/images/whiteKing.png";
 import blackKing from "../assets/images/blackKing.png";
 import whiteQueen from "../assets/images/whiteQueen.png";
@@ -10,7 +12,9 @@ import whiteBishop from "../assets/images/whiteBishop.png";
 import blackBishop from "../assets/images/blackBishop.png";
 import whitePawn from "../assets/images/whitePawn.png";
 import blackPawn from "../assets/images/blackPawn.png";
+
 import useAllSelectors from "../hooks/useAllSelectors";
+import {PawnContainer, Piece} from "../theme/customComponents";
 
 const Pieces = () => {
   const {
@@ -27,35 +31,34 @@ const Pieces = () => {
     playerKingAttacked,
   } = useAllSelectors();
 
-  const renderEachPiece = (a, src1, src2, alt1, alt2) => {
+  const renderEachPiece = (piece: string, src1: string, src2: string, alt1: string, alt2: string) => {
     return color === "white" ? (
-      <img
+      <Piece
+        component={"img"}
         src={src1}
-        key={a}
+        key={piece}
         alt={alt1}
-        className="piece"
         style={
-          activePiece === `${a}`
+          activePiece === `${piece}`
             ? {transform: `translate(${moveVar[0]}px, ${moveVar[1]}px)`}
             : {transform: `translate(0px, 0px)`, transition: `all ${animationSpeed}s`}
         }
-      ></img>
+      />
     ) : (
       <div
         className={`${color === "black" && !sandbox ? "reverse" : null}`}
         style={{height: "80px"}}
-        key={a}
+        key={piece}
       >
-        <img
+        <Piece
           src={src2}
           alt={alt2}
-          className="piece"
           style={
-            activePiece === `${a}`
+            activePiece === `${piece}`
               ? {transform: `translate(${moveVar[0]}px, ${moveVar[1]}px)`}
               : {transform: `translate(0px, 0px)`, transition: `all ${animationSpeed}s`}
           }
-        ></img>
+        />
       </div>
     );
   };
@@ -67,10 +70,10 @@ const Pieces = () => {
         style={{height: "80px"}}
         key={a}
       >
-        <img
+        <Piece
           src={src}
           alt={alt}
-          className={`piece ${
+          className={`${
             (/^ok/.test(a) && opponentKingAttacked && !currentMove) ||
             (/^ok/.test(a) && checkArrOpponent.some((a) => a === currentMove)) ||
             (/^pk/.test(a) && playerKingAttacked && !currentMove) ||
@@ -83,7 +86,7 @@ const Pieces = () => {
               ? {transform: `translate(${moveVar[0]}px, ${moveVar[1]}px)`}
               : {transform: `translate(0px, 0px)`, transition: `all ${animationSpeed}s`}
           }
-        ></img>
+        />
       </div>
     );
   };
@@ -173,202 +176,118 @@ const Pieces = () => {
   };
 
   const renderEntries = (piece: string, i: number) => {
+    if (/or/.test(piece)) {
+      return renderEachPiece(piece, blackRook, whiteRook, "Black Rook", "White Rook");
+    }
+
+    if (/oh/.test(piece)) {
+      return renderEachPiece(piece, blackKnight, whiteKnight, "Black Knight", "White Knight");
+    }
+
+    if (/ob/.test(piece)) {
+      return renderEachPiece(piece, blackBishop, whiteBishop, "Black Bishop", "White Bishop");
+    }
+
+    if (/owq/.test(piece)) {
+      return renderRoyals(piece, whiteQueen, "White Queen");
+    }
+
+    if (/oqb/.test(piece)) {
+      return renderRoyals(piece, blackQueen, "Black Queen");
+    }
+
     switch (piece) {
-      case "or1":
-      case "or2":
-      case "or3":
-      case "or4":
-      case "or5":
-      case "or6":
-      case "or7":
-      case "or8":
-      case "or9":
-      case "or01":
-        return renderEachPiece(piece, blackRook, whiteRook, "Black Rook", "White Rook");
-      case "oh1":
-      case "oh2":
-      case "oh3":
-      case "oh4":
-      case "oh5":
-      case "oh6":
-      case "oh7":
-      case "oh8":
-      case "oh9":
-      case "oh01":
-        return renderEachPiece(piece, blackKnight, whiteKnight, "Black Knight", "White Knight");
-      case "ob1":
-      case "ob2":
-      case "ob3":
-      case "ob4":
-      case "ob5":
-      case "ob6":
-      case "ob7":
-      case "ob8":
-      case "ob9":
-      case "ob01":
-        return renderEachPiece(piece, blackBishop, whiteBishop, "Black Bishop", "White Bishop");
       case "okw":
         return renderRoyals(piece, whiteKing, "White King");
       case "okb":
         return renderRoyals(piece, blackKing, "Black King");
-      case "oqw1":
-      case "oqw2":
-      case "oqw3":
-      case "oqw4":
-      case "oqw5":
-      case "oqw6":
-      case "oqw7":
-      case "oqw8":
-      case "oqw9":
-        return renderRoyals(piece, whiteQueen, "White Queen");
-      case "oqb1":
-      case "oqb2":
-      case "oqb3":
-      case "oqb4":
-      case "oqb5":
-      case "oqb6":
-      case "oqb7":
-      case "oqb8":
-      case "oqb9":
-        return renderRoyals(piece, blackQueen, "Black Queen");
       case "op1":
         return (
-          <div
-            className="pawnContainer"
-            key={i * 100 + "a"}
-          >
+          <PawnContainer key={i * 100 + "a"}>
             {renderEachPiece(piece, blackPawn, whitePawn, "Black Pawn", "White Pawn")}
             {/* {renderOpponentPromotion("op1", i)} */}
-          </div>
+          </PawnContainer>
         );
       case "op2":
         return (
-          <div
-            className="pawnContainer"
-            key={i * 100 + "a"}
-          >
+          <PawnContainer key={i * 100 + "a"}>
             {renderEachPiece(piece, blackPawn, whitePawn, "Black Pawn", "White Pawn")}
             {/* {renderOpponentPromotion("op2", i)} */}
-          </div>
+          </PawnContainer>
         );
       case "op3":
         return (
-          <div
-            className="pawnContainer"
-            key={i * 100 + "a"}
-          >
+          <PawnContainer key={i * 100 + "a"}>
             {renderEachPiece(piece, blackPawn, whitePawn, "Black Pawn", "White Pawn")}
             {/* {renderOpponentPromotion("op3", i)} */}
-          </div>
+          </PawnContainer>
         );
       case "op4":
         return (
-          <div
-            className="pawnContainer"
-            key={i * 100 + "a"}
-          >
+          <PawnContainer key={i * 100 + "a"}>
             {renderEachPiece(piece, blackPawn, whitePawn, "Black Pawn", "White Pawn")}
             {/* {renderOpponentPromotion("op4", i)} */}
-          </div>
+          </PawnContainer>
         );
       case "op5":
         return (
-          <div
-            className="pawnContainer"
-            key={i * 100 + "a"}
-          >
+          <PawnContainer key={i * 100 + "a"}>
             {renderEachPiece(piece, blackPawn, whitePawn, "Black Pawn", "White Pawn")}
             {/* {renderOpponentPromotion("op5", i)} */}
-          </div>
+          </PawnContainer>
         );
       case "op6":
         return (
-          <div
-            className="pawnContainer"
-            key={i * 100 + "a"}
-          >
+          <PawnContainer key={i * 100 + "a"}>
             {renderEachPiece(piece, blackPawn, whitePawn, "Black Pawn", "White Pawn")}
             {/* {renderOpponentPromotion("op6", i)} */}
-          </div>
+          </PawnContainer>
         );
       case "op7":
         return (
-          <div
-            className="pawnContainer"
-            key={i * 100 + "a"}
-          >
+          <PawnContainer key={i * 100 + "a"}>
             {renderEachPiece(piece, blackPawn, whitePawn, "Black Pawn", "White Pawn")}
             {/* {renderOpponentPromotion("op7", i)} */}
-          </div>
+          </PawnContainer>
         );
       case "op8":
         return (
-          <div
-            className="pawnContainer"
-            key={i * 100 + "a"}
-          >
+          <PawnContainer key={i * 100 + "a"}>
             {renderEachPiece(piece, blackPawn, whitePawn, "Black Pawn", "White Pawn")}
             {/* {renderOpponentPromotion("op8", i)} */}
-          </div>
+          </PawnContainer>
         );
       case "pr1":
-        return renderEachPiece(piece, whiteRook, blackRook, "White Rook", "Black Rook");
       case "pr2":
-        return renderEachPiece(piece, whiteRook, blackRook, "White Rook", "Black Rook");
       case "pr3":
-        return renderEachPiece(piece, whiteRook, blackRook, "White Rook", "Black Rook");
       case "pr4":
-        return renderEachPiece(piece, whiteRook, blackRook, "White Rook", "Black Rook");
       case "pr5":
-        return renderEachPiece(piece, whiteRook, blackRook, "White Rook", "Black Rook");
       case "pr6":
-        return renderEachPiece(piece, whiteRook, blackRook, "White Rook", "Black Rook");
       case "pr7":
-        return renderEachPiece(piece, whiteRook, blackRook, "White Rook", "Black Rook");
       case "pr8":
-        return renderEachPiece(piece, whiteRook, blackRook, "White Rook", "Black Rook");
       case "pr9":
-        return renderEachPiece(piece, whiteRook, blackRook, "White Rook", "Black Rook");
       case "pr01":
         return renderEachPiece(piece, whiteRook, blackRook, "White Rook", "Black Rook");
       case "ph1":
-        return renderEachPiece(piece, whiteKnight, blackKnight, "White Knight", "Black Knight");
       case "ph2":
-        return renderEachPiece(piece, whiteKnight, blackKnight, "White Knight", "Black Knight");
       case "ph3":
-        return renderEachPiece(piece, whiteKnight, blackKnight, "White Knight", "Black Knight");
       case "ph4":
-        return renderEachPiece(piece, whiteKnight, blackKnight, "White Knight", "Black Knight");
       case "ph5":
-        return renderEachPiece(piece, whiteKnight, blackKnight, "White Knight", "Black Knight");
       case "ph6":
-        return renderEachPiece(piece, whiteKnight, blackKnight, "White Knight", "Black Knight");
       case "ph7":
-        return renderEachPiece(piece, whiteKnight, blackKnight, "White Knight", "Black Knight");
       case "ph8":
-        return renderEachPiece(piece, whiteKnight, blackKnight, "White Knight", "Black Knight");
       case "ph9":
-        return renderEachPiece(piece, whiteKnight, blackKnight, "White Knight", "Black Knight");
       case "ph01":
         return renderEachPiece(piece, whiteKnight, blackKnight, "White Knight", "Black Knight");
       case "pb1":
-        return renderEachPiece(piece, whiteBishop, blackBishop, "White Bishop", "Black Bishop");
       case "pb2":
-        return renderEachPiece(piece, whiteBishop, blackBishop, "White Bishop", "Black Bishop");
       case "pb3":
-        return renderEachPiece(piece, whiteBishop, blackBishop, "White Bishop", "Black Bishop");
       case "pb4":
-        return renderEachPiece(piece, whiteBishop, blackBishop, "White Bishop", "Black Bishop");
       case "pb5":
-        return renderEachPiece(piece, whiteBishop, blackBishop, "White Bishop", "Black Bishop");
       case "pb6":
-        return renderEachPiece(piece, whiteBishop, blackBishop, "White Bishop", "Black Bishop");
       case "pb7":
-        return renderEachPiece(piece, whiteBishop, blackBishop, "White Bishop", "Black Bishop");
       case "pb8":
-        return renderEachPiece(piece, whiteBishop, blackBishop, "White Bishop", "Black Bishop");
       case "pb9":
-        return renderEachPiece(piece, whiteBishop, blackBishop, "White Bishop", "Black Bishop");
       case "pb01":
         return renderEachPiece(piece, whiteBishop, blackBishop, "White Bishop", "Black Bishop");
       case "pkw":
@@ -376,138 +295,111 @@ const Pieces = () => {
       case "pkb":
         return renderRoyals(piece, blackKing, "Black King");
       case "pqw1":
-        return renderRoyals(piece, whiteQueen, "White Queen");
       case "pqw2":
-        return renderRoyals(piece, whiteQueen, "White Queen");
       case "pqw3":
-        return renderRoyals(piece, whiteQueen, "White Queen");
       case "pqw4":
-        return renderRoyals(piece, whiteQueen, "White Queen");
       case "pqw5":
-        return renderRoyals(piece, whiteQueen, "White Queen");
       case "pqw6":
-        return renderRoyals(piece, whiteQueen, "White Queen");
       case "pqw7":
-        return renderRoyals(piece, whiteQueen, "White Queen");
       case "pqw8":
-        return renderRoyals(piece, whiteQueen, "White Queen");
       case "pqw9":
         return renderRoyals(piece, whiteQueen, "White Queen");
       case "pqb1":
-        return renderRoyals(piece, blackQueen, "Black Queen");
       case "pqb2":
-        return renderRoyals(piece, blackQueen, "Black Queen");
       case "pqb3":
-        return renderRoyals(piece, blackQueen, "Black Queen");
       case "pqb4":
-        return renderRoyals(piece, blackQueen, "Black Queen");
       case "pqb5":
-        return renderRoyals(piece, blackQueen, "Black Queen");
       case "pqb6":
-        return renderRoyals(piece, blackQueen, "Black Queen");
       case "pqb7":
-        return renderRoyals(piece, blackQueen, "Black Queen");
       case "pqb8":
-        return renderRoyals(piece, blackQueen, "Black Queen");
       case "pqb9":
         return renderRoyals(piece, blackQueen, "Black Queen");
       case "pp1":
         return (
-          <div
-            className="pawnContainer"
-            key={i * 100 + "a"}
-          >
+          <PawnContainer key={i * 100 + "a"}>
             {renderEachPiece(piece, whitePawn, blackPawn, "White Pawn", "Black Pawn")}
             {/* {renderPlayerPromotion("pp1", i)} */}
-          </div>
+          </PawnContainer>
         );
       case "pp2":
         return (
-          <div
-            className="pawnContainer"
-            key={i * 100 + "a"}
-          >
+          <PawnContainer key={i * 100 + "a"}>
             {renderEachPiece(piece, whitePawn, blackPawn, "White Pawn", "Black Pawn")}
             {/* {renderPlayerPromotion("pp2", i)} */}
-          </div>
+          </PawnContainer>
         );
       case "pp3":
         return (
-          <div
-            className="pawnContainer"
-            key={i * 100 + "a"}
-          >
+          <PawnContainer key={i * 100 + "a"}>
             {renderEachPiece(piece, whitePawn, blackPawn, "White Pawn", "Black Pawn")}
             {/* {renderPlayerPromotion("pp3", i)} */}
-          </div>
+          </PawnContainer>
         );
       case "pp4":
         return (
-          <div
-            className="pawnContainer"
-            key={i * 100 + "a"}
-          >
+          <PawnContainer key={i * 100 + "a"}>
             {renderEachPiece(piece, whitePawn, blackPawn, "White Pawn", "Black Pawn")}
             {/* {renderPlayerPromotion("pp4", i)} */}
-          </div>
+          </PawnContainer>
         );
       case "pp5":
         return (
-          <div
-            className="pawnContainer"
-            key={i * 100 + "a"}
-          >
+          <PawnContainer key={i * 100 + "a"}>
             {renderEachPiece(piece, whitePawn, blackPawn, "White Pawn", "Black Pawn")}
             {/* {renderPlayerPromotion("pp5", i)} */}
-          </div>
+          </PawnContainer>
         );
       case "pp6":
         return (
-          <div
-            className="pawnContainer"
-            key={i * 100 + "a"}
-          >
+          <PawnContainer key={i * 100 + "a"}>
             {renderEachPiece(piece, whitePawn, blackPawn, "White Pawn", "Black Pawn")}
             {/* {renderPlayerPromotion("pp6", i)} */}
-          </div>
+          </PawnContainer>
         );
       case "pp7":
         return (
-          <div
-            className="pawnContainer"
-            key={i * 100 + "a"}
-          >
+          <PawnContainer key={i * 100 + "a"}>
             {renderEachPiece(piece, whitePawn, blackPawn, "White Pawn", "Black Pawn")}
             {/* {renderPlayerPromotion("pp7", i)} */}
-          </div>
+          </PawnContainer>
         );
       case "pp8":
         return (
-          <div
-            className="pawnContainer"
-            key={i * 100 + "a"}
-          >
+          <PawnContainer key={i * 100 + "a"}>
             {renderEachPiece(piece, whitePawn, blackPawn, "White Pawn", "Black Pawn")}
             {/* {renderPlayerPromotion("pp8", i)} */}
-          </div>
+          </PawnContainer>
         );
       default:
         return (
-          <div
-            className="piece"
+          <Box
+            sx={{
+              width: "90px",
+              height: "90px",
+            }}
             key={i * 100 + "b"}
-          ></div>
+          ></Box>
         );
     }
   };
 
   return (
-    <div className="piecesGrid">
+    <Box
+      sx={{
+        position: "absolute",
+        width: "720px",
+        height: "720px",
+        left: "calc(50% - 360px)",
+        top: "0",
+        display: "flex",
+        flexWrap: "wrap",
+      }}
+    >
       {/* {currentMove === null
         ? boardEntries.map((a, i) => renderEntries(a[0], i))
         : Object.entries(JSON.parse(moves[currentMove])).map((a, i) => renderEntries(a[0], i))} */}
       {Object.entries(board).map((a, i) => renderEntries(a[0], i))}
-    </div>
+    </Box>
   );
 };
 

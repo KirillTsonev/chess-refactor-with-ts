@@ -1,17 +1,22 @@
-import {Box} from "@mui/material";
+import {Box, BoxProps} from "@mui/material";
 import {styled} from "@mui/system";
+
+type ImgProps = {
+  alt?: string;
+  src?: string;
+};
 
 export const BoardContainer = styled(Box)(() => ({
   display: "flex",
   flexWrap: "wrap",
-  width: "640px",
-  height: "640px",
+  width: "720px",
+  height: "720px",
   margin: "0 auto",
 }));
 
 export const Square = styled(Box)(({background, color}: {background: string; color: string}) => ({
-  width: "80px",
-  height: "80px",
+  width: "90px",
+  height: "90px",
   textAlign: "center",
   display: "flex",
   justifyContent: "center",
@@ -20,3 +25,16 @@ export const Square = styled(Box)(({background, color}: {background: string; col
   background,
   color,
 }));
+
+export const PawnContainer = styled(Box)(() => ({
+  position: "relative",
+  height: "90px",
+}));
+
+export const Piece = (props: BoxProps & ImgProps) => (
+  <Box
+    component="img"
+    sx={{padding: "2px 5px 8px 5px", width: "90px", height: "90px"}}
+    {...props}
+  />
+);

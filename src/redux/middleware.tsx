@@ -91,7 +91,7 @@ export const checkCastlingMoved: Middleware = (store) => (next) => (action) => {
     }
 
     const string = action.payload;
-    let reg;
+    let reg: RegExp;
 
     if (/(pk)|(ok)/.test(action.payload)) {
       reg = new RegExp(string.slice(0, 2));
