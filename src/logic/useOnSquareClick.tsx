@@ -5,41 +5,23 @@ import useUtils from "./useUtils";
 import useRecordKnightMoves from "./useRecordKnightMoves";
 import useCheckArrays from "./useCheckArrays";
 import {setMoveSquares, setActivePiece, setPieceSquare, setOldSquare} from "../redux/slices/boardSlice";
+import {setPieceSquareForEngine, setPlayerPiece} from "../redux/slices/squareSlice";
 
 const useOnSquareClick = () => {
   const dispatch = useDispatch();
 
   const {recordKnightMoves} = useRecordKnightMoves();
   const {checkArrays} = useCheckArrays();
-  const {
-    moveSquares,
-    toMove,
-    color,
-    activePiece,
-    currentMove,
-    gameEnd,
-    humanOpponent,
-    sandbox,
-    board,
-    playerKingAttacked,
-    oldSquare,
-  } = useAllSelectors();
-  const {
-    playerSquaresRender,
-    opponentSquaresRender,
-    opponentSquaresLive,
-    playerSquaresLive,
-    occupiedSquaresRender,
-    boardEntries,
-  } = useUtils();
+  const {moveSquares, toMove, color, activePiece, currentMove, gameEnd, humanOpponent, sandbox, board, playerKingAttacked, oldSquare} =
+    useAllSelectors();
+  const {playerSquaresRender, opponentSquaresRender, opponentSquaresLive, playerSquaresLive, occupiedSquaresRender, boardEntries} =
+    useUtils();
 
   function onSquareClick(i: number, piece: string) {
     if (
       ((!moveSquares.includes(i) && moveSquares.length > 0) || activePiece === piece) &&
-      ((((color === "white" && toMove === "b") || (color === "black" && toMove === "w")) &&
-        !playerSquaresRender().includes(i)) ||
-        (((color === "white" && toMove === "w") || (color === "black" && toMove === "b")) &&
-          !opponentSquaresRender().includes(i)))
+      ((((color === "white" && toMove === "b") || (color === "black" && toMove === "w")) && !playerSquaresRender().includes(i)) ||
+        (((color === "white" && toMove === "w") || (color === "black" && toMove === "b")) && !opponentSquaresRender().includes(i)))
     ) {
       dispatch(setMoveSquares([]));
       dispatch(setActivePiece(""));
@@ -50,10 +32,7 @@ const useOnSquareClick = () => {
       (occupiedSquaresRender().includes(i) && activePiece !== piece && !currentMove && !gameEnd && !humanOpponent) ||
       (humanOpponent && occupiedSquaresRender().includes(i) && activePiece !== piece && !currentMove && !gameEnd)
     ) {
-      if (
-        ((color === "white" && toMove === "w") || (color === "black" && toMove === "b")) &&
-        playerSquaresRender().includes(i)
-      ) {
+      if (((color === "white" && toMove === "w") || (color === "black" && toMove === "b")) && playerSquaresRender().includes(i)) {
         dispatch(setMoveSquares([]));
 
         // if (store.getState().board.oldSquare !== i) {
@@ -62,13 +41,14 @@ const useOnSquareClick = () => {
         }
 
         dispatch(setActivePiece(piece));
-
-        pieceSquareForEngine.current = i;
-        playerPiece.current = boardEntries()
-          .filter(([, value]) => value[0] === i)
-          .flat()[1][1];
-
-        pvpOldSquare.current = board[piece][1];
+        dispatch(setPieceSquareForEngine(i));
+        dispatch(
+          setPlayerPiece(
+            boardEntries()
+              .filter(([, value]) => value[0] === i)
+              .flat()[1][1]
+          )
+        );
 
         dispatch(setPieceSquare(i));
 
@@ -331,39 +311,14 @@ const useOnSquareClick = () => {
 
       pvpNewSquare.current = board[piece][1];
 
-      playerPawns = [
-        playerPawn1,
-        playerPawn2,
-        playerPawn3,
-        playerPawn4,
-        playerPawn5,
-        playerPawn6,
-        playerPawn7,
-        playerPawn8,
-      ];
+      playerPawns = [playerPawn1, playerPawn2, playerPawn3, playerPawn4, playerPawn5, playerPawn6, playerPawn7, playerPawn8];
 
       movePawn(i, activePiece);
     }
 
     if (/^pb/.test(activePiece) && moveSquares.includes(i)) {
-      checkArrays(
-        blackBishopMoves,
-        i,
-        checkedByPlayerArr.current,
-        playerSquaresLive(),
-        opponentSquaresLive(),
-        true,
-        true
-      );
-      checkArrays(
-        whiteBishopMoves,
-        i,
-        checkedByPlayerArr.current,
-        playerSquaresLive(),
-        opponentSquaresLive(),
-        true,
-        true
-      );
+      checkArrays(blackBishopMoves, i, checkedByPlayerArr.current, playerSquaresLive(), opponentSquaresLive(), true, true);
+      checkArrays(whiteBishopMoves, i, checkedByPlayerArr.current, playerSquaresLive(), opponentSquaresLive(), true, true);
 
       switch (activePiece) {
         case "pb1":
@@ -421,15 +376,7 @@ const useOnSquareClick = () => {
     }
 
     if (/^pr/.test(activePiece) && moveSquares.includes(i)) {
-      checkArrays(
-        rookMoves.current,
-        i,
-        checkedByPlayerArr.current,
-        playerSquaresLive(),
-        opponentSquaresLive(),
-        true,
-        true
-      );
+      checkArrays(rookMoves.current, i, checkedByPlayerArr.current, playerSquaresLive(), opponentSquaresLive(), true, true);
 
       switch (activePiece) {
         case "pr1":
@@ -487,33 +434,9 @@ const useOnSquareClick = () => {
     }
 
     if (/^pq/.test(activePiece) && moveSquares.includes(i)) {
-      checkArrays(
-        rookMoves.current,
-        i,
-        checkedByPlayerArr.current,
-        playerSquaresLive(),
-        opponentSquaresLive(),
-        true,
-        true
-      );
-      checkArrays(
-        blackBishopMoves,
-        i,
-        checkedByPlayerArr.current,
-        playerSquaresLive(),
-        opponentSquaresLive(),
-        true,
-        true
-      );
-      checkArrays(
-        whiteBishopMoves,
-        i,
-        checkedByPlayerArr.current,
-        playerSquaresLive(),
-        opponentSquaresLive(),
-        true,
-        true
-      );
+      checkArrays(rookMoves.current, i, checkedByPlayerArr.current, playerSquaresLive(), opponentSquaresLive(), true, true);
+      checkArrays(blackBishopMoves, i, checkedByPlayerArr.current, playerSquaresLive(), opponentSquaresLive(), true, true);
+      checkArrays(whiteBishopMoves, i, checkedByPlayerArr.current, playerSquaresLive(), opponentSquaresLive(), true, true);
 
       switch (activePiece) {
         case "pqw1":
@@ -683,24 +606,8 @@ const useOnSquareClick = () => {
     }
 
     if (/^ob/.test(activePiece) && moveSquares.includes(i)) {
-      checkArrays(
-        whiteBishopMoves,
-        i,
-        checkedByOpponentArr.current,
-        opponentSquaresLive(),
-        playerSquaresLive(),
-        true,
-        true
-      );
-      checkArrays(
-        blackBishopMoves,
-        i,
-        checkedByOpponentArr.current,
-        opponentSquaresLive(),
-        playerSquaresLive(),
-        true,
-        true
-      );
+      checkArrays(whiteBishopMoves, i, checkedByOpponentArr.current, opponentSquaresLive(), playerSquaresLive(), true, true);
+      checkArrays(blackBishopMoves, i, checkedByOpponentArr.current, opponentSquaresLive(), playerSquaresLive(), true, true);
 
       switch (activePiece) {
         case "ob1":
@@ -756,15 +663,7 @@ const useOnSquareClick = () => {
     }
 
     if (/^or/.test(activePiece) && moveSquares.includes(i)) {
-      checkArrays(
-        rookMoves.current,
-        i,
-        checkedByOpponentArr.current,
-        opponentSquaresLive(),
-        playerSquaresLive(),
-        true,
-        true
-      );
+      checkArrays(rookMoves.current, i, checkedByOpponentArr.current, opponentSquaresLive(), playerSquaresLive(), true, true);
 
       switch (activePiece) {
         case "or1":
@@ -820,33 +719,9 @@ const useOnSquareClick = () => {
     }
 
     if (/^oq/.test(activePiece) && moveSquares.includes(i)) {
-      checkArrays(
-        whiteBishopMoves,
-        i,
-        checkedByOpponentArr.current,
-        opponentSquaresLive(),
-        playerSquaresLive(),
-        true,
-        true
-      );
-      checkArrays(
-        blackBishopMoves,
-        i,
-        checkedByOpponentArr.current,
-        opponentSquaresLive(),
-        playerSquaresLive(),
-        true,
-        true
-      );
-      checkArrays(
-        rookMoves.current,
-        i,
-        checkedByOpponentArr.current,
-        opponentSquaresLive(),
-        playerSquaresLive(),
-        true,
-        true
-      );
+      checkArrays(whiteBishopMoves, i, checkedByOpponentArr.current, opponentSquaresLive(), playerSquaresLive(), true, true);
+      checkArrays(blackBishopMoves, i, checkedByOpponentArr.current, opponentSquaresLive(), playerSquaresLive(), true, true);
+      checkArrays(rookMoves.current, i, checkedByOpponentArr.current, opponentSquaresLive(), playerSquaresLive(), true, true);
 
       switch (activePiece) {
         case "oqw1":

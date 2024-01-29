@@ -36,7 +36,6 @@ const behaviorSlice = createSlice({
   },
 });
 
-export const {setDarkTheme, setNumbers, setAnimationSpeed, setCoordinates, setSounds, setMilliseconds} =
-  behaviorSlice.actions;
+export const {setDarkTheme, setNumbers, setAnimationSpeed, setCoordinates, setSounds, setMilliseconds} = behaviorSlice.actions;
 
 export default behaviorSlice;

@@ -20,21 +20,13 @@ const usePromotePawn = () => {
   const {playerSquaresLive, opponentSquaresLive, opponentSquaresRender, playerSquaresRender} = useUtils();
 
   function promotePawnFn(pawn: string, pieceToPromoteTo: string, i: number) {
-    if (/^pp/.test(pawn) && /^pq/.test(pieceToPromoteTo) && color === "white") {
-      pieceToPromoteTo = pieceToPromoteTo + "w";
-    }
+    if (/^pp/.test(pawn) && /^pq/.test(pieceToPromoteTo) && color === "white") pieceToPromoteTo = pieceToPromoteTo + "w";
 
-    if (/^pp/.test(pawn) && /^pq/.test(pieceToPromoteTo) && color === "black") {
-      pieceToPromoteTo = pieceToPromoteTo + "b";
-    }
+    if (/^pp/.test(pawn) && /^pq/.test(pieceToPromoteTo) && color === "black") pieceToPromoteTo = pieceToPromoteTo + "b";
 
-    if (/^op/.test(pawn) && /^oq/.test(pieceToPromoteTo) && color === "white") {
-      pieceToPromoteTo = pieceToPromoteTo + "b";
-    }
+    if (/^op/.test(pawn) && /^oq/.test(pieceToPromoteTo) && color === "white") pieceToPromoteTo = pieceToPromoteTo + "b";
 
-    if (/^op/.test(pawn) && /^oq/.test(pieceToPromoteTo) && color === "black") {
-      pieceToPromoteTo = pieceToPromoteTo + "w";
-    }
+    if (/^op/.test(pawn) && /^oq/.test(pieceToPromoteTo) && color === "black") pieceToPromoteTo = pieceToPromoteTo + "w";
 
     dispatch(promotePawn({pieceToPromoteTo, i}));
 
@@ -67,15 +59,7 @@ const usePromotePawn = () => {
     }
 
     if (/^pr/.test(pieceToPromoteTo)) {
-      checkArrays(
-        rookMoves.current,
-        i + 1,
-        checkedByPlayerArr.current,
-        playerSquaresLive(),
-        opponentSquaresLive(),
-        true,
-        true
-      );
+      checkArrays(rookMoves.current, i + 1, checkedByPlayerArr.current, playerSquaresLive(), opponentSquaresLive(), true, true);
 
       if (checkedByPlayerArr.current.includes(enemyKing)) {
         checkingPiece.current = i + 1;
@@ -90,15 +74,7 @@ const usePromotePawn = () => {
     }
 
     if (/^or/.test(pieceToPromoteTo)) {
-      checkArrays(
-        rookMoves.current,
-        i + 1,
-        checkedByPlayerArr.current,
-        opponentSquaresRender(),
-        playerSquaresRender(),
-        true,
-        true
-      );
+      checkArrays(rookMoves.current, i + 1, checkedByPlayerArr.current, opponentSquaresRender(), playerSquaresRender(), true, true);
 
       if (checkedByPlayerArr.current.includes(playerKing)) {
         checkingPiece.current = i + 1;
@@ -113,24 +89,8 @@ const usePromotePawn = () => {
     }
 
     if (/^pb/.test(pieceToPromoteTo)) {
-      checkArrays(
-        blackBishopMoves,
-        i + 1,
-        checkedByPlayerArr.current,
-        playerSquaresLive(),
-        opponentSquaresLive(),
-        true,
-        true
-      );
-      checkArrays(
-        whiteBishopMoves,
-        i + 1,
-        checkedByPlayerArr.current,
-        playerSquaresLive(),
-        opponentSquaresLive(),
-        true,
-        true
-      );
+      checkArrays(blackBishopMoves, i + 1, checkedByPlayerArr.current, playerSquaresLive(), opponentSquaresLive(), true, true);
+      checkArrays(whiteBishopMoves, i + 1, checkedByPlayerArr.current, playerSquaresLive(), opponentSquaresLive(), true, true);
 
       if (checkedByPlayerArr.current.includes(enemyKing)) {
         checkingPiece.current = i + 1;
@@ -145,24 +105,8 @@ const usePromotePawn = () => {
     }
 
     if (/^ob/.test(pieceToPromoteTo)) {
-      checkArrays(
-        whiteBishopMoves,
-        i + 1,
-        checkedByPlayerArr.current,
-        opponentSquaresRender(),
-        playerSquaresRender(),
-        true,
-        true
-      );
-      checkArrays(
-        blackBishopMoves,
-        i + 1,
-        checkedByPlayerArr.current,
-        opponentSquaresRender(),
-        playerSquaresRender(),
-        true,
-        true
-      );
+      checkArrays(whiteBishopMoves, i + 1, checkedByPlayerArr.current, opponentSquaresRender(), playerSquaresRender(), true, true);
+      checkArrays(blackBishopMoves, i + 1, checkedByPlayerArr.current, opponentSquaresRender(), playerSquaresRender(), true, true);
 
       if (checkedByPlayerArr.current.includes(playerKing)) {
         checkingPiece.current = i + 1;
@@ -177,33 +121,9 @@ const usePromotePawn = () => {
     }
 
     if (/^pq/.test(pieceToPromoteTo)) {
-      checkArrays(
-        rookMoves.current,
-        i + 1,
-        checkedByPlayerArr.current,
-        playerSquaresLive(),
-        opponentSquaresLive(),
-        true,
-        true
-      );
-      checkArrays(
-        blackBishopMoves,
-        i + 1,
-        checkedByPlayerArr.current,
-        playerSquaresLive(),
-        opponentSquaresLive(),
-        true,
-        true
-      );
-      checkArrays(
-        whiteBishopMoves,
-        i + 1,
-        checkedByPlayerArr.current,
-        playerSquaresLive(),
-        opponentSquaresLive(),
-        true,
-        true
-      );
+      checkArrays(rookMoves.current, i + 1, checkedByPlayerArr.current, playerSquaresLive(), opponentSquaresLive(), true, true);
+      checkArrays(blackBishopMoves, i + 1, checkedByPlayerArr.current, playerSquaresLive(), opponentSquaresLive(), true, true);
+      checkArrays(whiteBishopMoves, i + 1, checkedByPlayerArr.current, playerSquaresLive(), opponentSquaresLive(), true, true);
 
       if (checkedByPlayerArr.current.includes(enemyKing)) {
         checkingPiece.current = i + 1;
@@ -218,33 +138,9 @@ const usePromotePawn = () => {
     }
 
     if (/^oq/.test(pieceToPromoteTo)) {
-      checkArrays(
-        whiteBishopMoves,
-        i + 1,
-        checkedByPlayerArr.current,
-        opponentSquaresRender(),
-        playerSquaresRender(),
-        true,
-        true
-      );
-      checkArrays(
-        blackBishopMoves,
-        i + 1,
-        checkedByPlayerArr.current,
-        opponentSquaresRender(),
-        playerSquaresRender(),
-        true,
-        true
-      );
-      checkArrays(
-        rookMoves.current,
-        i + 1,
-        checkedByPlayerArr.current,
-        opponentSquaresRender(),
-        playerSquaresRender(),
-        true,
-        true
-      );
+      checkArrays(whiteBishopMoves, i + 1, checkedByPlayerArr.current, opponentSquaresRender(), playerSquaresRender(), true, true);
+      checkArrays(blackBishopMoves, i + 1, checkedByPlayerArr.current, opponentSquaresRender(), playerSquaresRender(), true, true);
+      checkArrays(rookMoves.current, i + 1, checkedByPlayerArr.current, opponentSquaresRender(), playerSquaresRender(), true, true);
 
       if (checkedByPlayerArr.current.includes(playerKing)) {
         checkingPiece.current = i + 1;

@@ -51,9 +51,13 @@ const useAllSelectors = () => {
   const pieceGainOpponent = useAppSelector((state) => state.progression.pieceGainOpponent);
 
   const checkingPiece = useAppSelector((state) => state.square.checkingPiece);
+  const pieceSquareForEngine = useAppSelector((state) => state.square.pieceSquareForEngine);
+  const playerPiece = useAppSelector((state) => state.square.playerPiece);
 
   return {
     checkingPiece,
+    playerPiece,
+    pieceSquareForEngine,
     activePiece,
     oldSquare,
     newSquare,

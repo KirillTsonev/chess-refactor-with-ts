@@ -110,7 +110,7 @@ export interface IBoard {
   halfMoveCounter: number;
   opponentKingAttacked: boolean;
   playerKingAttacked: boolean;
-  highlightMove: string[];
+  highlightMove: number[];
   toMove: string;
   gameEnd: boolean;
   moveSquares: number[];
