@@ -38,3 +38,12 @@ export const Piece = (props: BoxProps & ImgProps) => (
     {...props}
   />
 );
+
+export const MovementSquare = styled(Box)(() => ({
+  width: "90px",
+  height: "90px",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  cursor: "pointer",
+}));

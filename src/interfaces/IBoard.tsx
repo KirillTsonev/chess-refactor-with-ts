@@ -65,10 +65,18 @@ export type Pieces = {
   pr2: [number, string];
 };
 
+export type PromotionPayload = {
+  type: string;
+  payload: {
+    pieceToPromoteTo: string;
+    i: number;
+  };
+};
+
 export interface IBoard {
   activePiece: string;
-  oldSquare: string;
-  newSquare: string;
+  oldSquare: number;
+  newSquare: number;
   board: Pieces;
   pawnsFirstMove: {
     pp1: boolean | string;
@@ -106,7 +114,7 @@ export interface IBoard {
   toMove: string;
   gameEnd: boolean;
   moveSquares: number[];
-  pieceSquare: string;
+  pieceSquare: number;
   moveVar: number[];
   modalOpen: boolean;
   newGame: boolean;

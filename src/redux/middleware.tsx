@@ -1,6 +1,13 @@
 import {Middleware} from "@reduxjs/toolkit";
 
-import {setMovePiece, setPawnMoved} from "./slices/boardSlice";
+import {Pieces, PromotionPayload} from "../interfaces/IBoard";
+import {
+  setMovePiece,
+  setPawnMoved,
+  promotePawn,
+  setCastlingOpponentMoved,
+  setCastlingPlayerMoved,
+} from "./slices/boardSlice";
 
 let playerQueenCounter = 2;
 let playerKnightCounter = 2;
@@ -59,8 +66,8 @@ export const checkPieceMoved: Middleware = (store) => (next) => (action) => {
     const string = typeof action.payload === "string" ? action.payload : null;
     const reg = string ? new RegExp(string) : null;
     const asArray = Object.entries(pawnsFirstMove);
-    const filteredPawn = asArray.filter(([key, value]) => reg?.test(key));
-    const restArr = asArray.filter(([key, value]) => !reg?.test(key));
+    const filteredPawn = asArray.filter(([key]) => reg?.test(key));
+    const restArr = asArray.filter(([key]) => !reg?.test(key));
 
     filteredPawn[0][1] = false;
 
@@ -80,7 +87,9 @@ export const checkPieceMoved: Middleware = (store) => (next) => (action) => {
 };
 
 export const checkCastlingMoved: Middleware = (store) => (next) => (action) => {
-  const func = (action) => {
+  const func = (
+    action: {type: string; payload: string} | {type: string; payload: {[key: string]: string | boolean}}
+  ) => {
     let castlingMoved;
 
     if (action.type === "castlingPlayerMoved") {
@@ -89,18 +98,18 @@ export const checkCastlingMoved: Middleware = (store) => (next) => (action) => {
       castlingMoved = store.getState().board.castlingEnemyMoved;
     }
 
-    const string = action.payload;
+    const string = (action as {type: string; payload: string}).payload;
     let reg: RegExp;
 
-    if (/(pk)|(ok)/.test(action.payload)) {
+    if (/(pk)|(ok)/.test((action as {type: string; payload: string}).payload)) {
       reg = new RegExp(string.slice(0, 2));
     } else {
       reg = new RegExp(string);
     }
 
     const asArray = Object.entries(castlingMoved);
-    const filteredCastling = asArray.filter(([key, value]) => reg.test(key));
-    const restArr = asArray.filter(([key, value]) => !reg.test(key));
+    const filteredCastling = asArray.filter(([key]) => reg.test(key));
+    const restArr = asArray.filter(([key]) => !reg.test(key));
 
     filteredCastling[0][1] = false;
 
@@ -112,7 +121,7 @@ export const checkCastlingMoved: Middleware = (store) => (next) => (action) => {
     };
   };
 
-  if (action.type === "castlingPlayerMoved" || action.type === "castlingEnemyMoved") {
+  if (setCastlingOpponentMoved.match(action) || setCastlingPlayerMoved.match(action)) {
     return next(func(action));
   } else {
     return next(action);
@@ -120,9 +129,9 @@ export const checkCastlingMoved: Middleware = (store) => (next) => (action) => {
 };
 
 export const pawnPromotion: Middleware = (store) => (next) => (action) => {
-  const func = (action) => {
-    const asArray = Object.entries(store.getState().board.board);
-    let piece = action.payload.pieceToPromoteTo;
+  const func = (action: PromotionPayload | {type: string; payload: Pieces}) => {
+    const asArray: [string, [number, string]][] = Object.entries(store.getState().board.board);
+    let piece: string = (action as PromotionPayload).payload.pieceToPromoteTo;
 
     switch (piece.slice(0, 2)) {
       case "pq":
@@ -161,7 +170,7 @@ export const pawnPromotion: Middleware = (store) => (next) => (action) => {
         break;
     }
 
-    asArray[action.payload.i][0] = piece;
+    asArray[(action as PromotionPayload).payload.i][0] = piece;
 
     return {
       ...action,
@@ -169,7 +178,7 @@ export const pawnPromotion: Middleware = (store) => (next) => (action) => {
     };
   };
 
-  if (action.type === "pawnPromotion") {
+  if (promotePawn.match(action)) {
     return next(func(action));
   } else {
     return next(action);

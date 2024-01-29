@@ -1,5 +1,25 @@
+import {useDispatch} from "react-redux";
+
+import checkSoundFile from "../assets/sounds/check.ogg";
+import useAllSelectors from "../hooks/useAllSelectors";
+import useUtils from "./useUtils";
+import {
+  promotePawn,
+  setOpponentKingAttacked,
+  checkArrOpponent,
+  checkArrPlayer,
+  setPlayerKingAttacked,
+  setPawnPromotes,
+} from "../redux/slices/boardSlice";
+
 const usePromotePawn = () => {
-  const promotePawn = (pawn, pieceToPromoteTo, i) => {
+  const dispatch = useDispatch();
+  const checkSound = new Audio(checkSoundFile);
+
+  const {color, humanOpponent, sandbox, sounds, moves} = useAllSelectors();
+  const {playerSquaresLive, opponentSquaresLive, opponentSquaresRender, playerSquaresRender} = useUtils();
+
+  function promotePawnFn(pawn: string, pieceToPromoteTo: string, i: number) {
     if (/^pp/.test(pawn) && /^pq/.test(pieceToPromoteTo) && color === "white") {
       pieceToPromoteTo = pieceToPromoteTo + "w";
     }
@@ -16,48 +36,33 @@ const usePromotePawn = () => {
       pieceToPromoteTo = pieceToPromoteTo + "w";
     }
 
-    store.dispatch({
-      type: "pawnPromotion",
-      payload: {pieceToPromoteTo, i},
-    });
+    dispatch(promotePawn({pieceToPromoteTo, i}));
 
     if (/^ph/.test(pieceToPromoteTo)) {
-      recordKnightMoves(i + 1, checkedByPlayerArr.current, playerSquaresLive);
+      recordKnightMoves(i + 1, checkedByPlayerArr.current, playerSquaresLive());
 
       if (checkedByPlayerArr.current.includes(enemyKing)) {
         if (sounds) {
           checkSound.play();
         }
 
-        store.dispatch({
-          type: "enemyKingAttacked",
-          payload: true,
-        });
+        dispatch(setOpponentKingAttacked(true));
 
-        store.dispatch({
-          type: "checkArrOpponent",
-          payload: moves.length,
-        });
+        dispatch(checkArrOpponent(moves.length));
       }
     }
 
     if (/^oh/.test(pieceToPromoteTo)) {
-      recordKnightMoves(i + 1, checkedByPlayerArr.current, enemySquaresRender);
+      recordKnightMoves(i + 1, checkedByPlayerArr.current, opponentSquaresRender());
 
       if (checkedByPlayerArr.current.includes(playerKing)) {
         if (sounds) {
           checkSound.play();
         }
 
-        store.dispatch({
-          type: "playerKingAttacked",
-          payload: true,
-        });
+        dispatch(setPlayerKingAttacked(true));
 
-        store.dispatch({
-          type: "checkArrPlayer",
-          payload: moves.length,
-        });
+        dispatch(checkArrPlayer(moves.length));
       }
     }
 
@@ -66,8 +71,8 @@ const usePromotePawn = () => {
         rookMoves.current,
         i + 1,
         checkedByPlayerArr.current,
-        playerSquaresLive,
-        enemySquaresLive,
+        playerSquaresLive(),
+        opponentSquaresLive(),
         true,
         true
       );
@@ -78,15 +83,9 @@ const usePromotePawn = () => {
           checkSound.play();
         }
 
-        store.dispatch({
-          type: "enemyKingAttacked",
-          payload: true,
-        });
+        dispatch(setOpponentKingAttacked(true));
 
-        store.dispatch({
-          type: "checkArrOpponent",
-          payload: moves.length,
-        });
+        dispatch(checkArrOpponent(moves.length));
       }
     }
 
@@ -95,8 +94,8 @@ const usePromotePawn = () => {
         rookMoves.current,
         i + 1,
         checkedByPlayerArr.current,
-        enemySquaresRender,
-        playerSquaresRender,
+        opponentSquaresRender(),
+        playerSquaresRender(),
         true,
         true
       );
@@ -107,21 +106,31 @@ const usePromotePawn = () => {
           checkSound.play();
         }
 
-        store.dispatch({
-          type: "playerKingAttacked",
-          payload: true,
-        });
+        dispatch(setPlayerKingAttacked(true));
 
-        store.dispatch({
-          type: "checkArrPlayer",
-          payload: moves.length,
-        });
+        dispatch(checkArrPlayer(moves.length));
       }
     }
 
     if (/^pb/.test(pieceToPromoteTo)) {
-      checkArrays(blackBishopMoves, i + 1, checkedByPlayerArr.current, playerSquaresLive, enemySquaresLive, true, true);
-      checkArrays(whiteBishopMoves, i + 1, checkedByPlayerArr.current, playerSquaresLive, enemySquaresLive, true, true);
+      checkArrays(
+        blackBishopMoves,
+        i + 1,
+        checkedByPlayerArr.current,
+        playerSquaresLive(),
+        opponentSquaresLive(),
+        true,
+        true
+      );
+      checkArrays(
+        whiteBishopMoves,
+        i + 1,
+        checkedByPlayerArr.current,
+        playerSquaresLive(),
+        opponentSquaresLive(),
+        true,
+        true
+      );
 
       if (checkedByPlayerArr.current.includes(enemyKing)) {
         checkingPiece.current = i + 1;
@@ -129,15 +138,9 @@ const usePromotePawn = () => {
           checkSound.play();
         }
 
-        store.dispatch({
-          type: "enemyKingAttacked",
-          payload: true,
-        });
+        dispatch(setOpponentKingAttacked(true));
 
-        store.dispatch({
-          type: "checkArrOpponent",
-          payload: moves.length,
-        });
+        dispatch(checkArrOpponent(moves.length));
       }
     }
 
@@ -146,8 +149,8 @@ const usePromotePawn = () => {
         whiteBishopMoves,
         i + 1,
         checkedByPlayerArr.current,
-        enemySquaresRender,
-        playerSquaresRender,
+        opponentSquaresRender(),
+        playerSquaresRender(),
         true,
         true
       );
@@ -155,8 +158,8 @@ const usePromotePawn = () => {
         blackBishopMoves,
         i + 1,
         checkedByPlayerArr.current,
-        enemySquaresRender,
-        playerSquaresRender,
+        opponentSquaresRender(),
+        playerSquaresRender(),
         true,
         true
       );
@@ -167,15 +170,9 @@ const usePromotePawn = () => {
           checkSound.play();
         }
 
-        store.dispatch({
-          type: "playerKingAttacked",
-          payload: true,
-        });
+        dispatch(setPlayerKingAttacked(true));
 
-        store.dispatch({
-          type: "checkArrPlayer",
-          payload: moves.length,
-        });
+        dispatch(checkArrPlayer(moves.length));
       }
     }
 
@@ -184,13 +181,29 @@ const usePromotePawn = () => {
         rookMoves.current,
         i + 1,
         checkedByPlayerArr.current,
-        playerSquaresLive,
-        enemySquaresLive,
+        playerSquaresLive(),
+        opponentSquaresLive(),
         true,
         true
       );
-      checkArrays(blackBishopMoves, i + 1, checkedByPlayerArr.current, playerSquaresLive, enemySquaresLive, true, true);
-      checkArrays(whiteBishopMoves, i + 1, checkedByPlayerArr.current, playerSquaresLive, enemySquaresLive, true, true);
+      checkArrays(
+        blackBishopMoves,
+        i + 1,
+        checkedByPlayerArr.current,
+        playerSquaresLive(),
+        opponentSquaresLive(),
+        true,
+        true
+      );
+      checkArrays(
+        whiteBishopMoves,
+        i + 1,
+        checkedByPlayerArr.current,
+        playerSquaresLive(),
+        opponentSquaresLive(),
+        true,
+        true
+      );
 
       if (checkedByPlayerArr.current.includes(enemyKing)) {
         checkingPiece.current = i + 1;
@@ -198,15 +211,9 @@ const usePromotePawn = () => {
           checkSound.play();
         }
 
-        store.dispatch({
-          type: "enemyKingAttacked",
-          payload: true,
-        });
+        dispatch(setOpponentKingAttacked(true));
 
-        store.dispatch({
-          type: "checkArrOpponent",
-          payload: moves.length,
-        });
+        dispatch(checkArrOpponent(moves.length));
       }
     }
 
@@ -215,8 +222,8 @@ const usePromotePawn = () => {
         whiteBishopMoves,
         i + 1,
         checkedByPlayerArr.current,
-        enemySquaresRender,
-        playerSquaresRender,
+        opponentSquaresRender(),
+        playerSquaresRender(),
         true,
         true
       );
@@ -224,8 +231,8 @@ const usePromotePawn = () => {
         blackBishopMoves,
         i + 1,
         checkedByPlayerArr.current,
-        enemySquaresRender,
-        playerSquaresRender,
+        opponentSquaresRender(),
+        playerSquaresRender(),
         true,
         true
       );
@@ -233,8 +240,8 @@ const usePromotePawn = () => {
         rookMoves.current,
         i + 1,
         checkedByPlayerArr.current,
-        enemySquaresRender,
-        playerSquaresRender,
+        opponentSquaresRender(),
+        playerSquaresRender(),
         true,
         true
       );
@@ -245,26 +252,20 @@ const usePromotePawn = () => {
           checkSound.play();
         }
 
-        store.dispatch({
-          type: "playerKingAttacked",
-          payload: true,
-        });
+        dispatch(setPlayerKingAttacked(true));
 
-        store.dispatch({
-          type: "checkArrPlayer",
-          payload: moves.length,
-        });
+        dispatch(checkArrPlayer(moves.length));
       }
     }
 
-    setPawnPromotes("");
+    dispatch(setPawnPromotes(""));
 
     if (!sandbox && /^pp/.test(pawn) && !humanOpponent) {
       engineTurn();
     }
-  };
+  }
 
-  return {promotePawn};
+  return {promotePawnFn};
 };
 
 export default usePromotePawn;

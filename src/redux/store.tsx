@@ -4,6 +4,7 @@ import boardSlice from "./slices/boardSlice";
 import behaviorSlice from "./slices/behaviorSlice";
 import optionsSlice from "./slices/optionsSlice";
 import progressionSlice from "./slices/progressionSlice";
+import squareSlice from "./slices/squareSlice";
 import {swapAndEditBoard, checkPieceMoved, checkCastlingMoved, pawnPromotion} from "./middleware";
 
 const rootReducer = combineReducers({
@@ -11,6 +12,7 @@ const rootReducer = combineReducers({
   behavior: behaviorSlice.reducer,
   options: optionsSlice.reducer,
   progression: progressionSlice.reducer,
+  square: squareSlice.reducer,
 });
 
 export const store = configureStore({

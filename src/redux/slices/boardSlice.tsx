@@ -4,8 +4,8 @@ import {IBoard, Pieces} from "../../interfaces/IBoard";
 
 const initialState: IBoard = {
   activePiece: "",
-  oldSquare: "",
-  newSquare: "",
+  oldSquare: 0,
+  newSquare: 0,
   board: {
     or1: [1, "a8"],
     oh1: [2, "b8"],
@@ -108,7 +108,7 @@ const initialState: IBoard = {
   toMove: "w",
   gameEnd: false,
   moveSquares: [],
-  pieceSquare: "",
+  pieceSquare: 0,
   moveVar: [0, 0],
   modalOpen: false,
   newGame: false,
@@ -149,7 +149,7 @@ const boardSlice = createSlice({
     setMoveVar(state, action: PayloadAction<number[]>) {
       state.moveVar = action.payload;
     },
-    setPieceSquare(state, action: PayloadAction<string>) {
+    setPieceSquare(state, action: PayloadAction<number>) {
       state.pieceSquare = action.payload;
     },
     setMoveSquares(state, action: PayloadAction<number[]>) {
@@ -158,7 +158,7 @@ const boardSlice = createSlice({
     endGame(state) {
       state.gameEnd = true;
       state.moveSquares = [];
-      state.pieceSquare = "";
+      state.pieceSquare = 0;
     },
     setToMove(state, action: PayloadAction<string>) {
       state.toMove = action.payload;
@@ -166,7 +166,7 @@ const boardSlice = createSlice({
     highlightMove(state, action: PayloadAction<string>) {
       state.highlightMove = [...state.highlightMove, action.payload];
     },
-    promotePawn(state, action: PayloadAction<Pieces>) {
+    promotePawn(state, action) {
       state.board = action.payload;
     },
     incrementHalfMoveCounter(state) {
@@ -184,10 +184,10 @@ const boardSlice = createSlice({
     setActivePiece(state, action: PayloadAction<string>) {
       state.activePiece = action.payload;
     },
-    setOldSquare(state, action: PayloadAction<string>) {
+    setOldSquare(state, action: PayloadAction<number>) {
       state.oldSquare = action.payload;
     },
-    setNewSquare(state, action: PayloadAction<string>) {
+    setNewSquare(state, action: PayloadAction<number>) {
       state.newSquare = action.payload;
     },
     setPawnMoved(state, action: PayloadAction<{[key: string]: string}>) {
