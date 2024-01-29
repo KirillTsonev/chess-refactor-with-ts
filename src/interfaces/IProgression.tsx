@@ -1,7 +1,7 @@
 export interface IProgression {
   moveNumbers: number[];
   moves: string[];
-  currentMove: string;
+  currentMove: number;
   notationArr: string[];
   pieceGainPlayer: string[];
   pieceGainOpponent: string[];

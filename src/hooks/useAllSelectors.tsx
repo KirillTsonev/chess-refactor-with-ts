@@ -23,6 +23,7 @@ const useAllSelectors = () => {
   const endMessage = useAppSelector((state) => state.board.endMessage);
   const checkArrPlayer = useAppSelector((state) => state.board.checkArrPlayer);
   const checkArrOpponent = useAppSelector((state) => state.board.checkArrOpponent);
+  const pawnPromotes = useAppSelector((state) => state.board.pawnPromotes);
 
   const darkTheme = useAppSelector((state) => state.behavior.darkTheme);
   const numbers = useAppSelector((state) => state.behavior.numbers);
@@ -94,6 +95,7 @@ const useAllSelectors = () => {
     notationArr,
     pieceGainPlayer,
     pieceGainOpponent,
+    pawnPromotes,
   };
 };
 

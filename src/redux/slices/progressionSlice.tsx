@@ -5,7 +5,7 @@ import {IProgression} from "../../interfaces/IProgression";
 const initialState: IProgression = {
   moveNumbers: [1],
   moves: [],
-  currentMove: "",
+  currentMove: 0,
   notationArr: [],
   pieceGainPlayer: [],
   pieceGainOpponent: [],
@@ -21,7 +21,7 @@ const progressionSlice = createSlice({
     setMoves(state, action: PayloadAction<string>) {
       state.moves = [...state.moves, action.payload];
     },
-    setCurrentMove(state, action: PayloadAction<string>) {
+    setCurrentMove(state, action: PayloadAction<number>) {
       state.currentMove = action.payload;
     },
     setNotationArr(state, action: PayloadAction<string>) {

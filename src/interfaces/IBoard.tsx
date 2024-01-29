@@ -105,12 +105,13 @@ export interface IBoard {
   highlightMove: string[];
   toMove: string;
   gameEnd: boolean;
-  moveSquares: string[];
+  moveSquares: number[];
   pieceSquare: string;
   moveVar: number[];
   modalOpen: boolean;
   newGame: boolean;
   endMessage: string;
-  checkArrPlayer: string[];
-  checkArrOpponent: string[];
+  checkArrPlayer: number[];
+  checkArrOpponent: number[];
+  pawnPromotes: string;
 }

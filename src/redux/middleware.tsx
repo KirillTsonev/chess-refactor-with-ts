@@ -1,7 +1,6 @@
 import {Middleware} from "@reduxjs/toolkit";
 
-import {setMovePiece} from "./slices/boardSlice";
-import {Pieces} from "../interfaces/IBoard";
+import {setMovePiece, setPawnMoved} from "./slices/boardSlice";
 
 let playerQueenCounter = 2;
 let playerKnightCounter = 2;
@@ -55,13 +54,13 @@ export const swapAndEditBoard: Middleware = (store) => (next) => (action) => {
 };
 
 export const checkPieceMoved: Middleware = (store) => (next) => (action) => {
-  const func = (action) => {
+  const func = (action: {type: string; payload: unknown}) => {
     const pawnsFirstMove = store.getState().board.pawnsFirstMove;
-    const string = action.payload;
-    const reg = new RegExp(string);
+    const string = typeof action.payload === "string" ? action.payload : null;
+    const reg = string ? new RegExp(string) : null;
     const asArray = Object.entries(pawnsFirstMove);
-    const filteredPawn = asArray.filter(([key, value]) => reg.test(key));
-    const restArr = asArray.filter(([key, value]) => !reg.test(key));
+    const filteredPawn = asArray.filter(([key, value]) => reg?.test(key));
+    const restArr = asArray.filter(([key, value]) => !reg?.test(key));
 
     filteredPawn[0][1] = false;
 
@@ -73,7 +72,7 @@ export const checkPieceMoved: Middleware = (store) => (next) => (action) => {
     };
   };
 
-  if (action.type === "pawnMoved") {
+  if (setPawnMoved.match(action)) {
     return next(func(action));
   } else {
     return next(action);

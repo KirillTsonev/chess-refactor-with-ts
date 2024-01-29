@@ -115,16 +115,17 @@ const initialState: IBoard = {
   endMessage: "",
   checkArrPlayer: [],
   checkArrOpponent: [],
+  pawnPromotes: "",
 };
 
 const boardSlice = createSlice({
   name: "board",
   initialState,
   reducers: {
-    checkArrPlayer(state, action: PayloadAction<string>) {
+    checkArrPlayer(state, action: PayloadAction<number>) {
       state.checkArrPlayer = [...state.checkArrPlayer, action.payload];
     },
-    checkArrOpponent(state, action: PayloadAction<string>) {
+    checkArrOpponent(state, action: PayloadAction<number>) {
       state.checkArrPlayer = [...state.checkArrOpponent, action.payload];
     },
     resetBoard(state) {
@@ -151,7 +152,7 @@ const boardSlice = createSlice({
     setPieceSquare(state, action: PayloadAction<string>) {
       state.pieceSquare = action.payload;
     },
-    setMoveSquares(state, action: PayloadAction<string[]>) {
+    setMoveSquares(state, action: PayloadAction<number[]>) {
       state.moveSquares = action.payload;
     },
     endGame(state) {
@@ -210,6 +211,9 @@ const boardSlice = createSlice({
     incrementMoveCounter(state) {
       state.moveCounter = state.moveCounter + 1;
     },
+    setPawnPromotes(state, action: PayloadAction<string>) {
+      state.pawnPromotes = action.payload;
+    },
   },
 });
 
@@ -240,6 +244,7 @@ export const {
   setCastlingPlayerMoved,
   setCastlingOpponentMoved,
   incrementMoveCounter,
+  setPawnPromotes,
 } = boardSlice.actions;
 
 export default boardSlice;
