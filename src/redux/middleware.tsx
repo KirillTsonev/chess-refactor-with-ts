@@ -1,13 +1,7 @@
 import {Middleware} from "@reduxjs/toolkit";
 
 import {Pieces, PromotionPayload} from "../interfaces/IBoard";
-import {
-  setMovePiece,
-  setPawnMoved,
-  promotePawn,
-  setCastlingOpponentMoved,
-  setCastlingPlayerMoved,
-} from "./slices/boardSlice";
+import {setMovePiece, setPawnMoved, promotePawn, setCastlingOpponentMoved, setCastlingPlayerMoved} from "./slices/boardSlice";
 
 let playerQueenCounter = 2;
 let playerKnightCounter = 2;
@@ -20,37 +14,32 @@ let opponentBishopCounter = 2;
 let opponentRookCounter = 2;
 
 export const swapAndEditBoard: Middleware = (store) => (next) => (action) => {
-  const func = (action: {
-    type: string;
-    payload: unknown;
-  }): {type: string; payload: {[k: string]: [number, string]}} | undefined => {
-    const board = store.getState().board.board;
-    const oldSquare = store.getState().board.oldSquare;
-    const newSquare = store.getState().board.newSquare;
-    const asArray: [string, [number, string]][] = Object.entries(board);
+  const func = (action: {type: string; payload: string}): {type: string; payload: {[k: string]: [number, string]}} | undefined => {
+    const board: Pieces = store.getState().board.board;
+    const oldSquare: number = store.getState().board.oldSquare;
+    const newSquare: number = store.getState().board.newSquare;
+    const newObjEntries: [string, [number, string]][] = Object.entries({...board});
 
-    const swapElements = (array: [string, [number, string]][], index1: number, index2: number) => {
-      [array[index1 - 1][0], array[index2 - 1][0]] = [array[index2 - 1][0], array[index1 - 1][0]];
-    };
+    type KeyOfBoard = keyof typeof board;
 
-    try {
-      swapElements(asArray, oldSquare, newSquare);
-      asArray[oldSquare - 1][1] = oldSquare;
-      asArray[newSquare - 1][1] = newSquare;
+    for (const value in board) {
+      if (board[value as KeyOfBoard][0] === newSquare) {
+        const futureSquare = Object.keys(board).find(
+          (key) => JSON.stringify(board[key as KeyOfBoard]) === JSON.stringify(board[value as KeyOfBoard])
+        ) as string;
 
-      if (action.payload === "takes") {
-        asArray[oldSquare - 1][0] = `empty${Object.keys(board).filter((a) => /empty/.test(a)).length + 1}`;
+        newObjEntries[oldSquare - 1][0] = futureSquare;
+        newObjEntries[newSquare - 1][0] = action.payload;
       }
-
-      const swapped = Object.fromEntries(asArray);
-
-      return {
-        ...action,
-        payload: swapped,
-      };
-    } catch (error) {
-      console.error(error);
     }
+
+    if (action.payload === "takes")
+      newObjEntries[oldSquare - 1][0] = `empty${Object.keys(board).filter((a) => /empty/.test(a)).length + 1}`;
+
+    return {
+      ...action,
+      payload: Object.fromEntries(newObjEntries),
+    };
   };
 
   if (setMovePiece.match(action)) {
@@ -87,9 +76,7 @@ export const checkPieceMoved: Middleware = (store) => (next) => (action) => {
 };
 
 export const checkCastlingMoved: Middleware = (store) => (next) => (action) => {
-  const func = (
-    action: {type: string; payload: string} | {type: string; payload: {[key: string]: string | boolean}}
-  ) => {
+  const func = (action: {type: string; payload: string} | {type: string; payload: {[key: string]: string | boolean}}) => {
     let castlingMoved;
 
     if (action.type === "castlingPlayerMoved") {

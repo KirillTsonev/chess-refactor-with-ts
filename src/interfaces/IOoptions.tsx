@@ -1,5 +1,5 @@
 export interface IOptions {
-  sandbox: string;
+  sandbox: boolean;
   skillLevel: string;
   depth: string;
   millisecondsTime: string;

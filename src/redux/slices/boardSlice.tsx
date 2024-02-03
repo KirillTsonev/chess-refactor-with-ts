@@ -1,6 +1,6 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
-import {IBoard, Pieces} from "../../interfaces/IBoard";
+import {IBoard} from "../../interfaces/IBoard";
 
 const initialState: IBoard = {
   activePiece: "",
@@ -122,11 +122,11 @@ const boardSlice = createSlice({
   name: "board",
   initialState,
   reducers: {
-    checkArrPlayer(state, action: PayloadAction<number>) {
-      state.checkArrPlayer = [...state.checkArrPlayer, action.payload];
+    setCheckArrPlayer(state, action: PayloadAction<number[]>) {
+      state.checkArrPlayer = [...state.checkArrPlayer, ...action.payload];
     },
-    checkArrOpponent(state, action: PayloadAction<number>) {
-      state.checkArrPlayer = [...state.checkArrOpponent, action.payload];
+    setCheckArrOpponent(state, action: PayloadAction<number[]>) {
+      state.checkArrPlayer = [...state.checkArrOpponent, ...action.payload];
     },
     resetBoard(state) {
       state.board = initialState.board;
@@ -134,7 +134,7 @@ const boardSlice = createSlice({
     showEndMessage(state, action: PayloadAction<string>) {
       state.endMessage = action.payload;
     },
-    setBoard(state, action: PayloadAction<Pieces>) {
+    setBoard(state, action) {
       state.board = action.payload;
     },
     startNewGame(state) {
@@ -143,7 +143,7 @@ const boardSlice = createSlice({
     openModal(state, action: PayloadAction<boolean>) {
       state.modalOpen = action.payload;
     },
-    setMovePiece(state, action: PayloadAction<Pieces>) {
+    setMovePiece(state, action) {
       state.board = action.payload;
     },
     setMoveVar(state, action: PayloadAction<number[]>) {
@@ -163,7 +163,7 @@ const boardSlice = createSlice({
     setToMove(state, action: PayloadAction<string>) {
       state.toMove = action.payload;
     },
-    highlightMove(state, action: PayloadAction<string>) {
+    highlightMove(state, action: PayloadAction<number>) {
       state.highlightMove = [...state.highlightMove, action.payload];
     },
     promotePawn(state, action) {
@@ -190,19 +190,19 @@ const boardSlice = createSlice({
     setNewSquare(state, action: PayloadAction<number>) {
       state.newSquare = action.payload;
     },
-    setPawnMoved(state, action: PayloadAction<{[key: string]: string}>) {
+    setPawnMoved(state, action) {
       state.pawnsFirstMove = {
         ...state.pawnsFirstMove,
         ...action.payload,
       };
     },
-    setCastlingPlayerMoved(state, action: PayloadAction<{[key: string]: string}>) {
+    setCastlingPlayerMoved(state, action) {
       state.castlingPlayerMoved = {
         ...state.castlingPlayerMoved,
         ...action.payload,
       };
     },
-    setCastlingOpponentMoved(state, action: PayloadAction<{[key: string]: boolean}>) {
+    setCastlingOpponentMoved(state, action) {
       state.castlingOpponentMoved = {
         ...state.castlingOpponentMoved,
         ...action.payload,
@@ -218,8 +218,8 @@ const boardSlice = createSlice({
 });
 
 export const {
-  checkArrPlayer,
-  checkArrOpponent,
+  setCheckArrPlayer,
+  setCheckArrOpponent,
   resetBoard,
   showEndMessage,
   setBoard,

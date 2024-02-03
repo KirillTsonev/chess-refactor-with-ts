@@ -100,8 +100,8 @@ export const HighlightSquare = styled(Box)(() => ({
 }));
 
 export const OpponentSquare = styled(Box)(() => ({
-  height: "80px",
-  width: "80px",
+  height: "90px",
+  width: "90px",
   position: "absolute",
   "&::before": {
     content: '""',

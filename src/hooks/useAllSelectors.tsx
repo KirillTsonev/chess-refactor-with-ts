@@ -53,8 +53,12 @@ const useAllSelectors = () => {
   const checkingPiece = useAppSelector((state) => state.square.checkingPiece);
   const pieceSquareForEngine = useAppSelector((state) => state.square.pieceSquareForEngine);
   const playerPiece = useAppSelector((state) => state.square.playerPiece);
+  const enPassantSquare = useAppSelector((state) => state.square.enPassantSquare);
+  const playerNewSquareForEngine = useAppSelector((state) => state.square.playerNewSquareForEngine);
 
   return {
+    playerNewSquareForEngine,
+    enPassantSquare,
     checkingPiece,
     playerPiece,
     pieceSquareForEngine,

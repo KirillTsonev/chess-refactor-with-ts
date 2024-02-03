@@ -15,11 +15,13 @@ import blackPawn from "../assets/images/blackPawn.png";
 
 import useAllSelectors from "../hooks/useAllSelectors";
 import usePromotePawn from "../logic/usePromotePawn";
+import useUtils from "../logic/useUtils";
 import {PawnContainer, Piece} from "../theme/customComponents";
 
 const Pieces = () => {
+  const {promotePawnFn} = usePromotePawn();
+  const {boardEntries} = useUtils();
   const {
-    board,
     color,
     moveVar,
     activePiece,
@@ -33,7 +35,6 @@ const Pieces = () => {
     moves,
     pawnPromotes,
   } = useAllSelectors();
-  const {promotePawnFn} = usePromotePawn();
 
   const renderEachPiece = (piece: string, src1: string, src2: string) => {
     return color === "white" ? (
@@ -162,23 +163,14 @@ const Pieces = () => {
 
   const renderEntries = (piece: string, i: number) => {
     if (/or/.test(piece)) return renderEachPiece(piece, blackRook, whiteRook);
-
     if (/pr/.test(piece)) return renderEachPiece(piece, whiteRook, blackRook);
-
     if (/oh/.test(piece)) return renderEachPiece(piece, blackKnight, whiteKnight);
-
     if (/ph/.test(piece)) return renderEachPiece(piece, whiteKnight, blackKnight);
-
     if (/ob/.test(piece)) return renderEachPiece(piece, blackBishop, whiteBishop);
-
     if (/pb/.test(piece)) return renderEachPiece(piece, whiteBishop, blackBishop);
-
     if (/owq/.test(piece) || /pqw/.test(piece)) return renderRoyals(piece, whiteQueen);
-
     if (/oqb/.test(piece) || /pqb/.test(piece)) return renderRoyals(piece, blackQueen);
-
     if (piece === "okw" || piece === "pkw") return renderRoyals(piece, whiteKing);
-
     if (piece === "okb" || piece === "pkb") return renderRoyals(piece, blackKing);
 
     if (/op/.test(piece)) {
@@ -223,7 +215,7 @@ const Pieces = () => {
       }}
     >
       {!currentMove
-        ? Object.entries(board).map((a, i) => renderEntries(a[0], i))
+        ? boardEntries().map((a, i) => renderEntries(a[0], i))
         : Object.entries(JSON.parse(moves[currentMove])).map((a, i) => renderEntries(a[0], i))}
     </Box>
   );

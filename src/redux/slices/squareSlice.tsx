@@ -6,6 +6,8 @@ const initialState: ISquare = {
   checkingPiece: 0,
   pieceSquareForEngine: 0,
   playerPiece: "",
+  enPassantSquare: [0, ""],
+  playerNewSquareForEngine: "",
 };
 
 const squareSlice = createSlice({
@@ -21,9 +23,16 @@ const squareSlice = createSlice({
     setPlayerPiece(state, action: PayloadAction<string>) {
       state.playerPiece = action.payload;
     },
+    setEnPassantSquare(state, action: PayloadAction<[number, string]>) {
+      state.enPassantSquare = action.payload;
+    },
+    setPlayerNewSquareForEngine(state, action: PayloadAction<string>) {
+      state.playerNewSquareForEngine = action.payload;
+    },
   },
 });
 
-export const {setCheckingPiece, setPieceSquareForEngine, setPlayerPiece} = squareSlice.actions;
+export const {setCheckingPiece, setPieceSquareForEngine, setPlayerPiece, setEnPassantSquare, setPlayerNewSquareForEngine} =
+  squareSlice.actions;
 
 export default squareSlice;

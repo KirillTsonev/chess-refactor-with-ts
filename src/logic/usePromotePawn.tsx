@@ -6,8 +6,8 @@ import useUtils from "./useUtils";
 import {
   promotePawn,
   setOpponentKingAttacked,
-  checkArrOpponent,
-  checkArrPlayer,
+  setCheckArrOpponent,
+  setCheckArrPlayer,
   setPlayerKingAttacked,
   setPawnPromotes,
 } from "../redux/slices/boardSlice";
@@ -21,11 +21,8 @@ const usePromotePawn = () => {
 
   function promotePawnFn(pawn: string, pieceToPromoteTo: string, i: number) {
     if (/^pp/.test(pawn) && /^pq/.test(pieceToPromoteTo) && color === "white") pieceToPromoteTo = pieceToPromoteTo + "w";
-
     if (/^pp/.test(pawn) && /^pq/.test(pieceToPromoteTo) && color === "black") pieceToPromoteTo = pieceToPromoteTo + "b";
-
     if (/^op/.test(pawn) && /^oq/.test(pieceToPromoteTo) && color === "white") pieceToPromoteTo = pieceToPromoteTo + "b";
-
     if (/^op/.test(pawn) && /^oq/.test(pieceToPromoteTo) && color === "black") pieceToPromoteTo = pieceToPromoteTo + "w";
 
     dispatch(promotePawn({pieceToPromoteTo, i}));

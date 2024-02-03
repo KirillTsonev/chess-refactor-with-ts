@@ -18,11 +18,7 @@ const rootReducer = combineReducers({
 export const store = configureStore({
   reducer: rootReducer,
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware()
-      .concat(swapAndEditBoard)
-      .concat(checkPieceMoved)
-      .concat(checkCastlingMoved)
-      .concat(pawnPromotion),
+    getDefaultMiddleware().concat(swapAndEditBoard).concat(checkPieceMoved).concat(checkCastlingMoved).concat(pawnPromotion),
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

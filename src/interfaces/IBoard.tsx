@@ -65,6 +65,25 @@ export type Pieces = {
   pr2: [number, string];
 };
 
+export type PawnsFirstMove = {
+  pp1: boolean | string;
+  pp2: boolean | string;
+  pp3: boolean | string;
+  pp4: boolean | string;
+  pp5: boolean | string;
+  pp6: boolean | string;
+  pp7: boolean | string;
+  pp8: boolean | string;
+  op1: boolean | string;
+  op2: boolean | string;
+  op3: boolean | string;
+  op4: boolean | string;
+  op5: boolean | string;
+  op6: boolean | string;
+  op7: boolean | string;
+  op8: boolean | string;
+};
+
 export type PromotionPayload = {
   type: string;
   payload: {
@@ -78,24 +97,7 @@ export interface IBoard {
   oldSquare: number;
   newSquare: number;
   board: Pieces;
-  pawnsFirstMove: {
-    pp1: boolean | string;
-    pp2: boolean | string;
-    pp3: boolean | string;
-    pp4: boolean | string;
-    pp5: boolean | string;
-    pp6: boolean | string;
-    pp7: boolean | string;
-    pp8: boolean | string;
-    op1: boolean | string;
-    op2: boolean | string;
-    op3: boolean | string;
-    op4: boolean | string;
-    op5: boolean | string;
-    op6: boolean | string;
-    op7: boolean | string;
-    op8: boolean | string;
-  };
+  pawnsFirstMove: PawnsFirstMove;
   castlingPlayerMoved: {
     pk: boolean;
     pr1: boolean;

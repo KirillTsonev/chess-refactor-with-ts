@@ -3,12 +3,14 @@ import {Box} from "@mui/material";
 import useAllSelectors from "../hooks/useAllSelectors";
 import useOnSquareClick from "../logic/useOnSquareClick";
 import useUtils from "../logic/useUtils";
+import useAnimate from "../hooks/useAnimate";
 import {MovementSquare, HighlightSquare} from "../theme/customComponents";
 
 const Movement = () => {
   const {pawnPromotes, numbers, moveSquares} = useAllSelectors();
   const {onSquareClick} = useOnSquareClick();
   const {boardEntries} = useUtils();
+  useAnimate();
 
   function renderMovement() {
     const arr = [];
@@ -43,10 +45,10 @@ const Movement = () => {
         display: "flex",
         flexWrap: "wrap",
 
-        // color: "orange",
-        // fontSize: "30px",
-        // userSelect: "none",
-        // fontWeight: 700,
+        color: "orange",
+        fontSize: "30px",
+        userSelect: "none",
+        fontWeight: 700,
       }}
     >
       <Box

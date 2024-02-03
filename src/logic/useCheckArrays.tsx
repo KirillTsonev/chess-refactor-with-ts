@@ -17,8 +17,8 @@ const useCheckArrays = () => {
     i: number;
     ownArr: number[];
     oppArr: number[];
-    exclude1: number[];
-    exclude2: number[];
+    exclude1: boolean;
+    exclude2: boolean;
   }) {
     const playerEightStarXray = kingEightStar({
       index: pieces(/pk/)[0],

@@ -3,7 +3,7 @@ import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {IOptions} from "../../interfaces/IOoptions";
 
 const initialState: IOptions = {
-  sandbox: "",
+  sandbox: true,
   skillLevel: "",
   depth: "",
   millisecondsTime: "",
@@ -19,7 +19,7 @@ const optionsSlice = createSlice({
   name: "options",
   initialState,
   reducers: {
-    setSandbox(state, action: PayloadAction<string>) {
+    setSandbox(state, action: PayloadAction<boolean>) {
       state.sandbox = action.payload;
     },
     setSkillLevel(state, action: PayloadAction<string>) {

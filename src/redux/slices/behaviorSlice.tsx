@@ -4,7 +4,7 @@ import {IBehavior} from "../../interfaces/IBehavior";
 
 const initialState: IBehavior = {
   darkTheme: false,
-  numbers: false,
+  numbers: true,
   animationSpeed: 0.2,
   coordinates: true,
   sounds: true,
