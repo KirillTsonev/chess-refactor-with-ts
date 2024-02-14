@@ -257,7 +257,6 @@ const useAnimatePiece = () => {
       color === "white" ? dispatch(setToMove("w")) : dispatch(setToMove("b"));
 
       if ((color === "black" && toMove === "w") || (color === "white" && toMove === "b")) dispatch(incrementMoveCounter());
-
       if (/^pp/.test(enPassantSquare[1])) dispatch(setEnPassantSquare([0, ""]));
     }
 

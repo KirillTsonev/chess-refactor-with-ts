@@ -4,6 +4,10 @@ import {store} from "../redux/store";
 const useUtils = () => {
   const {board} = useAllSelectors();
 
+  function liveBoard() {
+    return store.getState().board.board;
+  }
+
   function boardEntries() {
     return Object.entries(board);
   }
@@ -74,6 +78,7 @@ const useUtils = () => {
   }
 
   return {
+    liveBoard,
     opponentSquaresLive,
     opponentSquaresRender,
     playerSquaresLive,

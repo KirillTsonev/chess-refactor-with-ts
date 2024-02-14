@@ -2,11 +2,13 @@ import {useDispatch} from "react-redux";
 
 import useAnimatePiece from "./useAnimatePiece";
 import useAllSelectors from "../hooks/useAllSelectors";
+import useAnimateEnPassant from "./useAnimateEnPassant";
 import {setEnPassantSquare} from "../redux/slices/squareSlice";
 
 const useMovePawn = () => {
   const dispatch = useDispatch();
 
+  const {animateEnPassant} = useAnimateEnPassant();
   const {animatePiece} = useAnimatePiece();
   const {enPassantSquare, pieceSquareForEngine} = useAllSelectors();
 
@@ -14,16 +16,16 @@ const useMovePawn = () => {
     if (i === enPassantSquare[0]) {
       switch (pieceSquareForEngine - i) {
         case -9:
-          animateEnPassant(-90, -90, string, i);
+          animateEnPassant({coor1: -90, coor2: -90, string, i});
           break;
         case -7:
-          animateEnPassant(90, -90, string, i);
+          animateEnPassant({coor1: 90, coor2: -90, string, i});
           break;
         case 7:
-          animateEnPassant(-90, 90, string, i);
+          animateEnPassant({coor1: -90, coor2: 90, string, i});
           break;
         case 9:
-          animateEnPassant(90, 90, string, i);
+          animateEnPassant({coor1: 90, coor2: 90, string, i});
           break;
         default:
           break;

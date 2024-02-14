@@ -118,11 +118,7 @@ const useRecordKnightMoves = () => {
           const arrTech = playerEightStar.filter((a) => a.includes(checkingPiece)).flat();
 
           arr = arr.filter((a) => arrTech.includes(a));
-        } else if (
-          playerKingAttacked &&
-          !playerEightStar.flat().includes(checkingPiece) &&
-          arr.includes(checkingPiece)
-        ) {
+        } else if (playerKingAttacked && !playerEightStar.flat().includes(checkingPiece) && arr.includes(checkingPiece)) {
           arr = [checkingPiece];
         } else if (playerKingAttacked) {
           arr = [];
@@ -139,11 +135,7 @@ const useRecordKnightMoves = () => {
           const arrTech = opponentEightStar.filter((a) => a.includes(checkingPiece)).flat();
 
           arr = arr.filter((a) => arrTech.includes(a));
-        } else if (
-          opponentKingAttacked &&
-          !opponentEightStar.flat().includes(checkingPiece) &&
-          arr.includes(checkingPiece)
-        ) {
+        } else if (opponentKingAttacked && !opponentEightStar.flat().includes(checkingPiece) && arr.includes(checkingPiece)) {
           arr = [checkingPiece];
         } else if (opponentKingAttacked) {
           arr = [];

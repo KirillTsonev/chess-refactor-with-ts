@@ -1,22 +1,32 @@
 import {useDispatch} from "react-redux";
 
+import checkSoundFile from "../assets/sounds/check.ogg";
 import castlingSoundFile from "../assets/sounds/castling.ogg";
 import useAllSelectors from "../hooks/useAllSelectors";
+import useUtils from "./useUtils";
+import useKingSpiderSense from "./useKingSpiderSense";
 import {
   setOldSquare,
   setNewSquare,
   setMoveVar,
-  moveNumbers,
   setToMove,
   setOpponentKingAttacked,
   setPlayerKingAttacked,
+  setMovePiece,
+  setMoveSquares,
+  setPieceSquare,
+  setBoard,
 } from "../redux/slices/boardSlice";
+import {setMoveNumbers} from "../redux/slices/progressionSlice";
 
 const useAnimateCastling = () => {
   const dispatch = useDispatch();
   const castlingSound = new Audio(castlingSoundFile);
+  const checkSound = new Audio(checkSoundFile);
 
-  const {sounds, color, sandbox} = useAllSelectors();
+  const {sounds, color, sandbox, toMove} = useAllSelectors();
+  const {pieces, playerSquaresLive, occupiedSquaresLive, opponentSquaresLive, liveBoard} = useUtils();
+  const {kingSpiderSense} = useKingSpiderSense();
 
   function animateCastling({
     coor1,
@@ -33,160 +43,84 @@ const useAnimateCastling = () => {
   }) {
     if (sounds) castlingSound.play();
 
-    if (color === "black" && sandbox) {
-      dispatch(setMoveVar([coor1, coor2]));
+    if (color === "black" && !sandbox) {
+      dispatch(setMoveVar([coor1 * -1, coor2 * -1]));
 
       if (/or/.test(rookToMove)) {
-        dispatch(setOldSquare(rookOldSq));
-
-        store.dispatch({
-          type: "newSquare",
-          payload: newSqRook - 1,
-        });
+        dispatch(setOldSquare(rookOldSq + 56));
+        dispatch(setNewSquare(newSqRook + 56));
       } else {
-        store.dispatch({
-          type: "oldSquare",
-          payload: rookOldSq,
-        });
-        store.dispatch({
-          type: "newSquare",
-          payload: newSqRook - 1,
-        });
-      }
-    } else if (color === "black" && !sandbox) {
-      store.dispatch({
-        type: "setMoveVar",
-        payload: [coor1 * -1, coor2 * -1],
-      });
-
-      if (/or/.test(rookToMove)) {
-        store.dispatch({
-          type: "oldSquare",
-          payload: rookOldSq + 56,
-        });
-        store.dispatch({
-          type: "newSquare",
-          payload: newSqRook + 56,
-        });
-      } else {
-        store.dispatch({
-          type: "oldSquare",
-          payload: rookOldSq - 56,
-        });
-        store.dispatch({
-          type: "newSquare",
-          payload: newSqRook - 56,
-        });
+        dispatch(setOldSquare(rookOldSq - 56));
+        dispatch(setNewSquare(newSqRook - 56));
       }
     } else {
-      store.dispatch({
-        type: "setMoveVar",
-        payload: [coor1, coor2],
-      });
-
-      store.dispatch({
-        type: "oldSquare",
-        payload: rookOldSq,
-      });
-
-      store.dispatch({
-        type: "newSquare",
-        payload: newSqRook,
-      });
+      dispatch(setMoveVar([coor1, coor2]));
+      dispatch(setOldSquare(rookOldSq));
+      dispatch(setNewSquare(newSqRook - 1));
     }
 
-    store.dispatch({
-      type: rookToMove,
-    });
+    dispatch(setMovePiece(rookToMove));
 
-    if ((color === "white" && toMove === "w") || (color === "black" && toMove === "w")) {
-      store.dispatch({
-        type: "moveNumbers",
-      });
-    }
+    if ((color === "white" && toMove === "w") || (color === "black" && toMove === "w")) dispatch(setMoveNumbers());
 
     // recordBoard();
 
+    const playerKingSpiderSenseArr = kingSpiderSense({
+      king: pieces(/pk/)[0],
+      ownArr: playerSquaresLive(),
+      oppArr: opponentSquaresLive(),
+    });
+
+    const opponentKingSpiderSenseArr = kingSpiderSense({
+      king: pieces(/ok/)[0],
+      ownArr: opponentSquaresLive(),
+      oppArr: playerSquaresLive(),
+    });
+
     if (/^pr/.test(rookToMove)) {
       if (
-        playerRooks.some((a) => enemyKingSpiderSenseArr.current[1].includes(a)) &&
-        occupiedSquaresLive.filter((a) => !playerSquaresLive.includes(a)).every((a) => !enemyKingSpiderSenseArr.current[1].includes(a))
+        pieces(/pr/).some((a) => opponentKingSpiderSenseArr[1].includes(a)) &&
+        occupiedSquaresLive()
+          .filter((a) => !playerSquaresLive().includes(a))
+          .every((a) => !opponentKingSpiderSenseArr[1].includes(a))
       ) {
-        if (sounds) {
-          checkSound.play();
-        }
+        if (sounds) checkSound.play();
 
-        store.dispatch({
-          type: "enemyKingAttacked",
-          payload: true,
-        });
+        dispatch(setOpponentKingAttacked(true));
 
-        store.dispatch({
-          type: "checkArrOpponent",
-          payload: moves.length,
-        });
+        // store.dispatch({
+        //   type: "checkArrOpponent",
+        //   payload: moves.length,
+        // });
       }
     } else {
       if (
-        enemyRooks.some((a) => playerKingSpiderSenseArr.current[1].includes(a)) &&
-        occupiedSquaresLive.filter((a) => !enemySquaresLive.includes(a)).every((a) => !playerKingSpiderSenseArr.current[1].includes(a))
+        pieces(/or/).some((a) => playerKingSpiderSenseArr[1].includes(a)) &&
+        occupiedSquaresLive()
+          .filter((a) => !opponentSquaresLive().includes(a))
+          .every((a) => !playerKingSpiderSenseArr[1].includes(a))
       ) {
-        if (sounds) {
-          checkSound.play();
-        }
+        if (sounds) checkSound.play();
 
-        store.dispatch({
-          type: "playerKingAttacked",
-          payload: true,
-        });
+        dispatch(setPlayerKingAttacked(true));
 
-        store.dispatch({
-          type: "checkArrPlayer",
-          payload: moves.length,
-        });
+        // store.dispatch({
+        //   type: "checkArrPlayer",
+        //   payload: moves.length,
+        // });
       }
     }
 
-    store.dispatch({
-      type: "moveSquares",
-      payload: [],
-    });
-
-    store.dispatch({
-      type: "pieceSquare",
-      payload: null,
-    });
+    dispatch(setMoveSquares([]));
+    dispatch(setPieceSquare(0));
 
     if (color === "white") {
-      if (/^pr/.test(rookToMove)) {
-        store.dispatch({
-          type: "toMove",
-          payload: "b",
-        });
-      } else {
-        store.dispatch({
-          type: "toMove",
-          payload: "w",
-        });
-      }
+      /^pr/.test(rookToMove) ? dispatch(setToMove("b")) : dispatch(setToMove("w"));
     } else {
-      if (/^or/.test(rookToMove)) {
-        store.dispatch({
-          type: "toMove",
-          payload: "b",
-        });
-      } else {
-        store.dispatch({
-          type: "toMove",
-          payload: "w",
-        });
-      }
+      /^or/.test(rookToMove) ? dispatch(setToMove("b")) : dispatch(setToMove("w"));
     }
 
-    store.dispatch({
-      type: "recordMoves",
-      payload: JSON.stringify(store.getState().board.board),
-    });
+    dispatch(setBoard(liveBoard()));
   }
 
   return {animateCastling};

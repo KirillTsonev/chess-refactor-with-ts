@@ -16,11 +16,11 @@ const useMoveKing = () => {
     if (/^pk/.test(string)) {
       switch (pieceSquareForEngine - i) {
         case -2:
-          animateCastling(-160, 0, 64, 62, "pr2");
+          animateCastling({coor1: -180, coor2: 0, rookOldSq: 64, newSqRook: 62, rookToMove: "pr2"});
           dispatch(setNotationArr("O-O"));
           break;
         case 2:
-          animateCastling(160, 0, 57, 60, "pr1");
+          animateCastling({coor1: 180, coor2: 0, rookOldSq: 57, newSqRook: 60, rookToMove: "pr1"});
           dispatch(setNotationArr("O-O-O"));
           break;
         default:
@@ -31,11 +31,11 @@ const useMoveKing = () => {
     if (/^ok/.test(string)) {
       switch (pieceSquareForEngine - i) {
         case 2:
-          animateCastling(160, 0, 1, 4, "or2");
+          animateCastling({coor1: 180, coor2: 0, rookOldSq: 1, newSqRook: 4, rookToMove: "or2"});
           dispatch(setNotationArr("O-O-O"));
           break;
         case -2:
-          animateCastling(-160, 0, 8, 6, "or1");
+          animateCastling({coor1: -180, coor2: 0, rookOldSq: 8, newSqRook: 6, rookToMove: "or1"});
           dispatch(setNotationArr("O-O"));
           break;
         default:

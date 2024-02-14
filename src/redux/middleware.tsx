@@ -33,6 +33,8 @@ export const swapAndEditBoard: Middleware = (store) => (next) => (action) => {
       }
     }
 
+    console.log(Object.fromEntries(newObjEntries));
+
     if (action.payload === "takes")
       newObjEntries[oldSquare - 1][0] = `empty${Object.keys(board).filter((a) => /empty/.test(a)).length + 1}`;
 

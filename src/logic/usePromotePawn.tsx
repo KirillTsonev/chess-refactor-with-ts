@@ -37,7 +37,7 @@ const usePromotePawn = () => {
 
         dispatch(setOpponentKingAttacked(true));
 
-        dispatch(checkArrOpponent(moves.length));
+        // dispatch(checkArrOpponent(moves.length));
       }
     }
 
@@ -51,7 +51,7 @@ const usePromotePawn = () => {
 
         dispatch(setPlayerKingAttacked(true));
 
-        dispatch(checkArrPlayer(moves.length));
+        // dispatch(checkArrPlayer(moves.length));
       }
     }
 
@@ -66,7 +66,7 @@ const usePromotePawn = () => {
 
         dispatch(setOpponentKingAttacked(true));
 
-        dispatch(checkArrOpponent(moves.length));
+        // dispatch(checkArrOpponent(moves.length));
       }
     }
 
@@ -81,7 +81,7 @@ const usePromotePawn = () => {
 
         dispatch(setPlayerKingAttacked(true));
 
-        dispatch(checkArrPlayer(moves.length));
+        //dispatch(checkArrPlayer(moves.length));
       }
     }
 
@@ -113,7 +113,7 @@ const usePromotePawn = () => {
 
         dispatch(setPlayerKingAttacked(true));
 
-        dispatch(checkArrPlayer(moves.length));
+        //dispatch(checkArrPlayer(moves.length));
       }
     }
 
@@ -147,7 +147,7 @@ const usePromotePawn = () => {
 
         dispatch(setPlayerKingAttacked(true));
 
-        dispatch(checkArrPlayer(moves.length));
+        //dispatch(checkArrPlayer(moves.length));
       }
     }
 
