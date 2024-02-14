@@ -49,7 +49,7 @@ const useAnimateEnPassant = () => {
 
     dispatch(setOldSquare(i));
     dispatch(setNewSquare(capturedPawn));
-    dispatch(setMovePiece("takes"));
+    dispatch(setMovePiece(string + "takes"));
     dispatch(setOldSquare(capturedPawn));
     dispatch(setNewSquare(i));
     dispatch(setMovePiece(string));

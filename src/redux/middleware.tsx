@@ -29,13 +29,11 @@ export const swapAndEditBoard: Middleware = (store) => (next) => (action) => {
         ) as string;
 
         newObjEntries[oldSquare - 1][0] = futureSquare;
-        newObjEntries[newSquare - 1][0] = action.payload;
+        newObjEntries[newSquare - 1][0] = action.payload.replace("takes", "");
       }
     }
 
-    console.log(Object.fromEntries(newObjEntries));
-
-    if (action.payload === "takes")
+    if (action.payload.includes("takes"))
       newObjEntries[oldSquare - 1][0] = `empty${Object.keys(board).filter((a) => /empty/.test(a)).length + 1}`;
 
     return {

@@ -43,7 +43,7 @@ const useUpdateStateBoard = () => {
 
     if (/^o/.test(string)) {
       if (playerSquaresRender().includes(i)) {
-        dispatch(setMovePiece("takes"));
+        dispatch(setMovePiece(string + "takes"));
       } else {
         dispatch(setMovePiece(string));
       }
@@ -51,7 +51,7 @@ const useUpdateStateBoard = () => {
 
     if (/^p/.test(string)) {
       if (opponentSquaresRender().includes(i)) {
-        dispatch(setMovePiece("takes"));
+        dispatch(setMovePiece(string + "takes"));
       } else {
         dispatch(setMovePiece(string));
       }
