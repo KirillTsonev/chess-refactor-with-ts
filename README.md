@@ -1,4 +1,4 @@
-Chess with Stockfish
+# Chess with Stockfish
 
 A complete game of chess made from scratch using React, Material UI for styling, Redux for state management, and a version of the Stockfish chess engine compiled to JavaScript and WebAssembly using Emscripten (https://github.com/lichess-org/stockfish.js) along with a custom-written FEN encoder to interact with it through UCI.
 
