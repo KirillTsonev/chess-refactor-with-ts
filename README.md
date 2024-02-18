@@ -1,30 +1,14 @@
-# React + TypeScript + Vite
+Chess with Stockfish
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A complete game of chess made from scratch using React, Material UI for styling, Redux for state management, and a version of the Stockfish chess engine compiled to JavaScript and WebAssembly using Emscripten (https://github.com/lichess-org/stockfish.js) along with a custom-written FEN encoder to interact with it through UCI.
 
-Currently, two official plugins are available:
+Includes piece movement animations with adjustable speed, sounds, square highlights, separate timers for each player, the ability to go through played moves, difficulty options when playing against Stockfish, and all game logic:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
-
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+- Castling
+- Pawn promotion
+- En passant
+- Discovered checks, castling checks, en passant checks
+- Threefold repetition
+- Fifty-move rule
+- Stalemate
+- Checkmate
