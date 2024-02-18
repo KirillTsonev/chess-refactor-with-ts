@@ -54,18 +54,6 @@ const useAnimatePiece = () => {
   const {kingSpiderSense} = useKingSpiderSense();
   const {kingEightStar} = useKingEightStar();
 
-  const playerKingSpiderSenseArr = kingSpiderSense({
-    king: pieces(/pk/)[0],
-    ownArr: playerSquaresLive(),
-    oppArr: opponentSquaresLive(),
-  });
-
-  const opponentKingSpiderSenseArr = kingSpiderSense({
-    king: pieces(/ok/)[0],
-    ownArr: opponentSquaresLive(),
-    oppArr: playerSquaresLive(),
-  });
-
   const playerEightStar = kingEightStar({
     index: pieces(/pk/)[0],
     ownSquares: playerSquaresRender(),
@@ -94,6 +82,12 @@ const useAnimatePiece = () => {
     }
 
     if (/^o/.test(string)) {
+      const playerKingSpiderSenseArr = kingSpiderSense({
+        king: pieces(/pk/)[0],
+        ownArr: playerSquaresLive(),
+        oppArr: opponentSquaresLive(),
+      });
+
       if (playerSquaresRender().includes(i)) {
         if (pieces(/pp/).includes(i)) dispatch(setPieceGainOpponent("♙"));
         if (pieces(/ph/).includes(i)) dispatch(setPieceGainOpponent("♘"));
@@ -261,6 +255,12 @@ const useAnimatePiece = () => {
     }
 
     if (/^p/.test(string)) {
+      const opponentKingSpiderSenseArr = kingSpiderSense({
+        king: pieces(/ok/)[0],
+        ownArr: opponentSquaresLive(),
+        oppArr: playerSquaresLive(),
+      });
+
       if (opponentSquaresRender().includes(i)) {
         dispatch(resetHalfMoveCounter());
 

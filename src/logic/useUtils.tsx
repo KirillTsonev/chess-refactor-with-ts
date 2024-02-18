@@ -72,7 +72,7 @@ const useUtils = () => {
   }
 
   function pieces(regex: RegExp) {
-    return boardEntries()
+    return Object.entries(liveBoard())
       .filter((a) => regex.test(a[0]))
       .map((a) => a[1][0]);
   }
