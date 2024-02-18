@@ -17,17 +17,9 @@ const useUpdateStateBoard = () => {
   const {boardEntries, playerSquaresRender, opponentSquaresRender} = useUtils();
 
   function updateStateBoard(i: number, string: string) {
-    if (/^pp/.test(string) || /^op/.test(string)) {
-      dispatch(setPawnMoved(string));
-    }
-
-    if (/(pr1)|(pr2)/.test(string) || /^pk/.test(string)) {
-      dispatch(setCastlingPlayerMoved(string));
-    }
-
-    if (/(or1)|(or2)/.test(string) || /^ok/.test(string)) {
-      dispatch(setCastlingOpponentMoved(string));
-    }
+    if (/^pp/.test(string) || /^op/.test(string)) dispatch(setPawnMoved(string));
+    if (/(pr1)|(pr2)/.test(string) || /^pk/.test(string)) dispatch(setCastlingPlayerMoved(string));
+    if (/(or1)|(or2)/.test(string) || /^ok/.test(string)) dispatch(setCastlingOpponentMoved(string));
 
     dispatch(setNewSquare(i));
 
